@@ -4,7 +4,7 @@ metadata:
   name: pod-name-sso
 spec:
   containers:
-  - name: pod-name-sso
+  - name: pod-name-sso                # Replace this with your SSO
     image: ubuntu:20.04
     command: ["sh", "-c", "echo 'Im a new pod' && sleep infinity"]
     resources:
@@ -16,8 +16,8 @@ spec:
         cpu: 2
     volumeMounts:
     - mountPath: /data
-      name: persistentVolume-name
+      name: persistentVolume-name     # Replace this with your PVC name
   volumes:
-    - name: persistentVolume-name
+    - name: persistentVolume-name     # Replace this with your PVC name
       persistentVolumeClaim:
         claimName: persistentVolume-name

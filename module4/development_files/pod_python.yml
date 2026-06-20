@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-python-SSO
+  name: pod-python-SSO            # Replace this with your SSO
 spec:
   containers:
   - name: mypod
