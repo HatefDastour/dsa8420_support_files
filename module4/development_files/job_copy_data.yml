@@ -7,13 +7,13 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-      - name: pod-data-download-sso
+      - name: pod-data-download-sso # Replace the sso with your pawprint name
         image: ubuntu:20.04
         command: ["/bin/sh","-c"]
         args:
-        - cp -r /solaiman/* /data/
+        - cp -r /sso/* /data/       # Replace the sso with your pawprint name
         volumeMounts:
-        - mountPath: /solaiman
+        - mountPath: /sso           # Replace the sso with your pawprint name
           name: source
         - mountPath: /data
           name: destination 
@@ -30,6 +30,6 @@ spec:
           claimName: cloudcomp-data
       - name: destination
         persistentVolumeClaim:
-          claimName: cloudcomp-solaiman
+          claimName: cloudcomp-sso  # Replace the sso with your pawprint name
       restartPolicy: Never      
   backoffLimit: 0
