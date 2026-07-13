@@ -1,35 +1,35 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job-data-download-sso
+  name: job-copy-data-sso
 spec:
   template:
     spec:
       automountServiceAccountToken: false
       containers:
-      - name: pod-data-download-sso # Replace the sso with your pawprint name
+      - name: pod-copy-data-sso   # Replace the sso with your pawprint name
         image: ubuntu:20.04
         command: ["/bin/sh","-c"]
         args:
-        - cp -r /sso/* /data/       # Replace the sso with your pawprint name
+        - cp -r /data/* /newdata/
         volumeMounts:
-        - mountPath: /sso           # Replace the sso with your pawprint name
+        - mountPath: /data          # source: your existing PVC (with image1.npy, image2.npy)
           name: source
-        - mountPath: /data
-          name: destination 
+        - mountPath: /newdata       # destination: your new, second PVC
+          name: destination
         resources:
             limits:
               memory: 10Gi
               cpu: "4"
             requests:
               memory: 10Gi
-              cpu: "4"     
+              cpu: "4"
       volumes:
       - name: source
         persistentVolumeClaim:
-          claimName: cloudcomp-data
+          claimName: sso-pv        # Replace with your first PVC name (e.g. <your_sso>-pv)
       - name: destination
         persistentVolumeClaim:
-          claimName: sso-pv       # Replace the sso with your pawprint name, and make sure the PVC is created before running this job
-      restartPolicy: Never      
+          claimName: sso-pv-new    # Replace with your second PVC name (e.g. <your_sso>-pv-new), created before running this job
+      restartPolicy: Never
   backoffLimit: 0
