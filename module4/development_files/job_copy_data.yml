@@ -30,6 +30,6 @@ spec:
           claimName: cloudcomp-data
       - name: destination
         persistentVolumeClaim:
-          claimName: cloudcomp-sso  # Replace the sso with your pawprint name
+          claimName: sso-pv       # Replace the sso with your pawprint name, and make sure the PVC is created before running this job
       restartPolicy: Never      
   backoffLimit: 0
