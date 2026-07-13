@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-name-sso
+  name: pod-name-sso                  # Replace this with your SSO
 spec:
   containers:
   - name: pod-name-sso                # Replace this with your SSO
@@ -16,8 +16,8 @@ spec:
         cpu: 2
     volumeMounts:
     - mountPath: /data
-      name: persistentVolume-name     # Replace this with your PVC name
+      name: persistentVolume-name     # Replace this with your PVC name from persistent_volume.yml
   volumes:
-    - name: persistentVolume-name     # Replace this with your PVC name
+    - name: persistentVolume-name     # Replace this with your PVC name from persistent_volume.yml
       persistentVolumeClaim:
         claimName: persistentVolume-name
