@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-name-sso                  # Replace this with your SSO
+  name: <YOUR-SSO>-pod                # Replace <YOUR-SSO> with your SSO (e.g., hdtg3-pod)
 spec:
   containers:
-  - name: pod-name-sso                # Replace this with your SSO
+  - name: <YOUR-SSO>-container        # Replace <YOUR-SSO> with your SSO
     image: ubuntu:20.04
     command: ["sh", "-c", "echo 'Im a new pod' && sleep infinity"]
     resources:
@@ -16,8 +16,8 @@ spec:
         cpu: 2
     volumeMounts:
     - mountPath: /data
-      name: persistentVolume-name     # Replace this with your PVC name from persistent_volume.yml
+      name: pod-storage               # Internal reference (must match volumes[].name below)
   volumes:
-    - name: persistentVolume-name     # Replace this with your PVC name from persistent_volume.yml
+    - name: pod-storage               # Internal reference (must match volumeMounts[].name above)
       persistentVolumeClaim:
-        claimName: persistentVolume-name
+        claimName: <YOUR-PVC-NAME>    # Replace with the exact PVC name created in persistent_volume.yml (e.g., hdtg3-pv)
