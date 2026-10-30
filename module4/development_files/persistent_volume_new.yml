@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: your_sso-pv-new     # Replace this with your SSO
+  name: {MU-SSO-ID}-pv-new        # Replace {MU-SSO-ID} with your SSO (e.g., hdtg3-pv-new)
 spec:
   storageClassName: rook-cephfs
   accessModes:
