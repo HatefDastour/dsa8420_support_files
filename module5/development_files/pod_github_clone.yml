@@ -1,0 +1,30 @@
+# Practice 5.1 - Pod that mounts your PVC (used to clone your GitHub repo)
+# TODO: replace every <your-sso> (5 places) with your lowercase SSO, e.g. hdtg3
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-<your-sso>-github-clone
+spec:
+  automountServiceAccountToken: false
+  containers:
+  - name: pod-<your-sso>-github-clone
+    image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
+    tty: true
+    stdin: true
+    workingDir: /data
+    command: ["/bin/sh", "-c", "echo 'Im a new pod' && sleep infinity"]
+    volumeMounts:
+    - name: <your-sso>-pv-new
+      mountPath: /data
+    resources:
+      limits:
+        memory: 10Gi
+        cpu: "1"
+      requests:
+        memory: 10Gi
+        cpu: "1"
+  volumes:
+  - name: <your-sso>-pv-new
+    persistentVolumeClaim:
+      claimName: <your-sso>-pv-new
+  restartPolicy: Never
