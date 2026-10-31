@@ -1,0 +1,34 @@
+# Exercise 5.01 - GPU Pod for a quick smoke test of the training script
+# TODO: replace every placeholder written as angle-bracket your-sso (5 places) with your lowercase SSO, e.g. hdtg3
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-<your-sso>-resnet18-test
+spec:
+  automountServiceAccountToken: false
+  containers:
+  - name: pod-<your-sso>-resnet18-test
+    image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
+    tty: true
+    stdin: true
+    workingDir: /data
+    command: ["/bin/sh","-c"]
+    args:
+    - sleep 7200            # safety net: the pod ends by itself after 2 hours
+    volumeMounts:
+    - name: <your-sso>-pv-new
+      mountPath: /data
+    resources:
+      limits:
+        memory: 8Gi
+        cpu: 2
+        nvidia.com/gpu: 1
+      requests:
+        memory: 8Gi
+        cpu: 2
+        nvidia.com/gpu: 1
+  volumes:
+  - name: <your-sso>-pv-new
+    persistentVolumeClaim:
+      claimName: <your-sso>-pv-new
+  restartPolicy: Never
