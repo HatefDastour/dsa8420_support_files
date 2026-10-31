@@ -1,5 +1,5 @@
 # Practice 5.1 - Pod that mounts your PVC (used to clone your GitHub repo)
-# TODO: replace every <your-sso> (5 places) with your lowercase SSO, e.g. hdtg3
+# TODO: replace every placeholder written as angle-bracket your-sso (5 places) with your lowercase SSO, e.g. hdtg3
 apiVersion: v1
 kind: Pod
 metadata:
@@ -14,7 +14,7 @@ spec:
     workingDir: /data
     command: ["/bin/sh", "-c", "echo 'Im a new pod' && sleep infinity"]
     volumeMounts:
-    - name: <your-sso>-pv-new
+    - name: <your-sso>-pv
       mountPath: /data
     resources:
       limits:
@@ -24,7 +24,7 @@ spec:
         memory: 10Gi
         cpu: "1"
   volumes:
-  - name: <your-sso>-pv-new
+  - name: <your-sso>-pv
     persistentVolumeClaim:
-      claimName: <your-sso>-pv-new
+      claimName: <your-sso>-pv
   restartPolicy: Never
