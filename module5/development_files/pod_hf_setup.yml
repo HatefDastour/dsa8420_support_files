@@ -1,0 +1,30 @@
+# Practice 5.2 - small CPU pod used only to put files on your PVC
+# TODO: replace every placeholder written as angle-bracket your-sso (5 places) with your lowercase SSO, e.g. hdtg3
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-<your-sso>-hf-setup
+spec:
+  automountServiceAccountToken: false
+  containers:
+  - name: pod-<your-sso>-hf-setup
+    image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
+    tty: true
+    stdin: true
+    workingDir: /data
+    command: ["/bin/sh", "-c", "echo 'Im a setup pod' && sleep infinity"]
+    volumeMounts:
+    - name: <your-sso>-pv # From Module 4, this is the name of the volume that is mounted to the pod. It must match the name of the volume defined in the volumes section below.
+      mountPath: /data
+    resources:
+      limits:
+        memory: 4Gi
+        cpu: "1"
+      requests:
+        memory: 4Gi
+        cpu: "1"
+  volumes:
+  - name: <your-sso>-pv
+    persistentVolumeClaim:
+      claimName: <your-sso>-pv
+  restartPolicy: Never

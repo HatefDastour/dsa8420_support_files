@@ -1,0 +1,38 @@
+# A Job manages Pods that run a task to completion.
+apiVersion: batch/v1  # API group/version for the Job resource.
+kind: Job            # Type of Kubernetes resource to create.
+metadata:            # Identifying information about this Job.
+  name: python-job   # Job name within its namespace.
+spec:                # Desired behavior of the Job (Job-level settings).
+  completions: 3     # Require three successfully completed Pods.
+  parallelism: 2     # Request up to two active task Pods at a time.
+
+  # Pod blueprint: the Job uses this template to create its task Pods.
+  template:
+    spec:            # Configuration of each Pod, not of the Job itself.
+      # Do not restart a terminated container inside the same Pod.
+      # The Job controller can still create replacement Pods after failures,
+      # subject to the Job's retry/backoff limits.
+      restartPolicy: Never
+      containers:    # List of containers to run in each task Pod.
+        - name: python             # Container name within its Pod.
+          image: python:3.9-slim    # Image name and tag: slim Python 3.9 image.
+          # Override the image's entrypoint: run Python with inline code.
+          # The -c option executes the code supplied as the next argument.
+          command: ["python", "-c"]
+          # Arguments passed to the command above.
+          # The dash creates one list item; | makes it a multiline string,
+          # preserving line breaks. The whole script is one argument.
+          args:
+            - |
+              # Import Python's time module to use its sleep function.
+              import time
+              # Compute the sum and write the result to container logs.
+              print("Sum:", sum([10, 20, 30]))
+              # Pause for five seconds to simulate a short task.
+              time.sleep(5)
+              # Log completion; the script then exits normally.
+              print("Task completed!")
+
+# Each task Pod runs the same complete script; the Job does not automatically
+# divide the list among Pods. Each successful run prints Sum: 60.

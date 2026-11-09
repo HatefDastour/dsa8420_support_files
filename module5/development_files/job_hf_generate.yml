@@ -1,0 +1,43 @@
+# Practice 5.2 - GPU Job that runs one Hugging Face language model
+# TODO: replace every placeholder written as angle-bracket your-sso (5 places) with your lowercase SSO, e.g. hdtg3
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-<your-sso>-phi3-generate
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: job-<your-sso>-phi3-generate
+        image: gitlab-registry.nrp-nautilus.io/cloud-computing/geoai-toolki:838fc6ea
+        # If the run fails with "No module named transformers", comment out the
+        # line above and use this one instead:
+        # image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
+        tty: true
+        stdin: true
+        workingDir: /data
+        env:
+        - name: HF_HOME              # model weights are cached on your PVC
+          value: /data/hf_cache
+        command: ["/bin/sh","-c"]
+        args:
+        - python3 /data/hf_practice/run_llm.py --model phi3;
+        volumeMounts:
+        - name: <your-sso>-pv
+          mountPath: /data
+        resources:
+          limits:
+            memory: 20Gi
+            cpu: 2
+            nvidia.com/gpu: 1
+          requests:
+            memory: 20Gi
+            cpu: 2
+            nvidia.com/gpu: 1
+      volumes:
+      - name: <your-sso>-pv
+        persistentVolumeClaim:
+          claimName: <your-sso>-pv
+      restartPolicy: Never
+  backoffLimit: 0

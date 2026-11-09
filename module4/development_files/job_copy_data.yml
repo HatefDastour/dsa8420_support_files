@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-copy-data-{MU-SSO-ID}         # Replace {MU-SSO-ID} with your SSO
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: pod-copy-data-{MU-SSO-ID}   # Replace {MU-SSO-ID} with your SSO
+        image: ubuntu:20.04
+        command: ["/bin/sh","-c"]
+        args:
+        - cp -r /data/* /newdata/
+        volumeMounts:
+        - mountPath: /data
+          name: source
+        - mountPath: /newdata
+          name: destination
+        resources:
+          limits:
+            memory: 10Gi
+            cpu: "4"
+          requests:
+            memory: 10Gi
+            cpu: "4"
+      volumes:
+      - name: source
+        persistentVolumeClaim:
+          claimName: {MU-SSO-ID}-pv        # Replace with your source PVC name
+      - name: destination
+        persistentVolumeClaim:
+          claimName: {MU-SSO-ID}-pv-new    # Replace with your destination PVC name
+      restartPolicy: Never
+  backoffLimit: 0

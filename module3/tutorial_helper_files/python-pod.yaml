@@ -1,0 +1,17 @@
+# A standalone Pod runs the container defined below, without a Job controller.
+apiVersion: v1       # Core Kubernetes API version used for Pods.
+kind: Pod            # Type of Kubernetes resource to create.
+metadata:            # Identifying information about this Pod.
+  name: python-pod   # Pod name within its namespace.
+spec:                # Desired configuration of this Pod.
+  containers:        # List of containers belonging to the Pod.
+    - name: python               # Container name within the Pod.
+      image: python:3.9-slim      # Image name and tag: slim Python 3.9 image.
+      # Override the image's entrypoint with the sleep program.
+      # Wait 3,600 seconds (one hour); no Python script runs at startup.
+      # Both the executable and its argument are supplied in this list.
+      command: ["sleep", "3600"]
+
+  # restartPolicy is omitted, so Kubernetes uses the default: Always.
+  # When sleep exits, the kubelet restarts this container, even after a
+  # successful exit. Therefore, this Pod is not a one-hour batch Job.
