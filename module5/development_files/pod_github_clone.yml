@@ -9,6 +9,8 @@ spec:
   containers:
   - name: pod-<your-sso>-github-clone
     image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
+    # alternatively, you can use the image below
+    # image: gitlab-registry.nrp-nautilus.io/cloud-computing/geoai-toolkit:838fc6ea
     tty: true
     stdin: true
     workingDir: /data

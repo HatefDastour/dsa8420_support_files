@@ -10,7 +10,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: job-<your-sso>-phi3-generate
-        image: gitlab-registry.nrp-nautilus.io/cloud-computing/geoai-toolki:838fc6ea
+        image: gitlab-registry.nrp-nautilus.io/cloud-computing/geoai-toolkit:838fc6ea
         # If the run fails with "No module named transformers", comment out the
         # line above and use this one instead:
         # image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
